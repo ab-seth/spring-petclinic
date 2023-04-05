@@ -3,6 +3,9 @@ pipeline {
     tools {
         maven 'Maven'
     }
+    environment {
+        JAVA_HOME = "${tool 'JDK 17'}"
+    }
     stages {
         stage('Build') {
             steps {
