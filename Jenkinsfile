@@ -9,5 +9,12 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('PetClinic-SonarQube') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
     }
 }
