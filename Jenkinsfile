@@ -19,15 +19,12 @@ pipeline {
     stage('Deploy') {
       steps {
         echo 'Deploying...'
-        withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_KEY', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
+        withCredentials([sshUserPrivateKey(credentialsId: '4df15039-bafc-423c-acab-3159949be96d', keyFileVariable: 'SSH_KEY')]) {
           ansiblePlaybook(
             inventory: 'hosts.ini',
             playbook: 'deploy_petclinic.yml',
             installation: 'ansible',
-            extraVars: [
-              ssh_key_file: env.SSH_KEY,
-              ssh_user: env.SSH_USER
-            ]
+            extras: '-e "ansible_ssh_private_key_file=$SSH_KEY"'
           )
         }
       }
