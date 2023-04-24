@@ -1,26 +1,37 @@
 pipeline {
-    agent any
-    tools {
-        maven 'Maven'
+  agent any
+
+  stages {
+    stage('Build') {
+      steps {
+        echo 'Building...'
+        sh './mvnw clean install -DskipTests'
+      }
     }
-    
-    stages {
-        stage('Build') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('PetClinic-SonarQube') {
-                    sh 'mvn sonar:sonar'
-                }
-            }
-        }
-        stage('Run') {
-            steps {
-                sh 'java -Dserver.port=8081 -jar target/spring-petclinic-3.0.0-SNAPSHOT.jar &'
-            }
-        }
+
+    stage('Test') {
+      steps {
+        echo 'Testing...'
+        sh './mvnw test'
+      }
     }
+
+    stage('Deploy') {
+      steps {
+        echo 'Deploying...'
+        ansiblePlaybook(
+          inventory: 'hosts.ini',
+          playbook: 'deploy_petclinic.yml',
+          installation: 'ansible'
+        )
+      }
+    }
+  }
+
+  post {
+    always {
+      echo 'Running cleanup tasks...'
+      sh './mvnw clean'
+    }
+  }
 }
