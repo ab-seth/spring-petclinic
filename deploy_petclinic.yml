@@ -1,0 +1,27 @@
+- name: Deploy PetClinic app
+  hosts: webserver
+  become: yes
+  tasks:
+    - name: Copy the JAR file to the web server
+      ansible.builtin.copy:
+        src: /var/jenkins_home/workspace/PetClinic/target/*.jar
+        dest: /app/petclinic.jar
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Install systemd service file for PetClinic
+      ansible.builtin.template:
+        src: petclinic.service.j2
+        dest: /etc/systemd/system/petclinic.service
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart petclinic
+
+  handlers:
+    - name: restart petclinic
+      ansible.builtin.systemd:
+        name: petclinic
+        state: restarted
+        daemon_reload: yes
