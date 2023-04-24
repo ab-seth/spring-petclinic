@@ -1,7 +1,5 @@
 pipeline {
-  agent {
-    label 'docker'
-  }
+  agent any
 
   stages {
     stage('Build') {
@@ -21,11 +19,17 @@ pipeline {
     stage('Deploy') {
       steps {
         echo 'Deploying...'
-        ansiblePlaybook(
-          inventory: 'hosts.ini',
-          playbook: 'deploy_petclinic.yml',
-          installation: 'ansible'
-        )
+        withCredentials([sshUserPrivateKey(credentialsId: 'my-ssh-key', keyFileVariable: 'SSH_KEY', passphraseVariable: '', usernameVariable: 'SSH_USER')]) {
+          ansiblePlaybook(
+            inventory: 'hosts.ini',
+            playbook: 'deploy_petclinic.yml',
+            installation: 'ansible',
+            extraVars: [
+              ssh_key_file: env.SSH_KEY,
+              ssh_user: env.SSH_USER
+            ]
+          )
+        }
       }
     }
   }
