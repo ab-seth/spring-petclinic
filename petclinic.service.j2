@@ -1,0 +1,11 @@
+[Unit]
+Description=Petclinic Application
+
+[Service]
+User=root
+WorkingDirectory=/app
+ExecStart=/usr/bin/java -jar /app/petclinic.jar
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
