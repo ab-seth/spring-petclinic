@@ -1,7 +1,7 @@
----
 - name: Deploy Petclinic App
-  hosts: webserver
+  hosts: hw2_ansible-web_server-1
   become: yes
+  remote_user: root
 
   tasks:
     - name: Create app directory
