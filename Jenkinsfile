@@ -3,10 +3,10 @@ pipeline {
 
   stages {
     stage('Build') {
-      steps {
-        echo 'Building...'
-        sh './mvnw clean install -DskipTests'
-      }
+        steps {
+          echo 'Building...'
+            sh 'mvn clean install'
+        }
     }
 
     stage('Test') {
