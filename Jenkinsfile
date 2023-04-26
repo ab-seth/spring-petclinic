@@ -3,14 +3,18 @@ pipeline {
   tools {
     maven 'Maven'
 }
+   options {
+    timestamps()
+  }
 
   stages {
     stage('Build') {
         steps {
-          echo 'Building...'
+          echo "========== Building Stage Starts =========="
           sh 'mkdir -p target'
           sh 'mvn clean install -X'
           sh 'ls -la target'
+          echo "========== Building Stage Ends =========="
         }
     }
 
