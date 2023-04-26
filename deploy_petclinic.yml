@@ -14,20 +14,9 @@
         src: "{{ jar_file }}"
         dest: /app/petclinic.jar
 
-    - name: Install systemd service
-      template:
-        src: petclinic.service.j2
-        dest: /etc/systemd/system/petclinic.service
-      notify:
-        - Reload systemd
-        - Restart petclinic
-
-  handlers:
-    - name: Reload systemd
-      systemd:
-        daemon_reload: yes
-
-    - name: Restart petclinic
-      systemd:
-        name: petclinic
-        state: restarted
+    - name: Run Petclinic application
+      shell: "nohup java -jar /app/petclinic.jar &"
+      args:
+        executable: /bin/bash
+      async: 1
+      poll: 0
