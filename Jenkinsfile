@@ -9,7 +9,8 @@ pipeline {
         steps {
           echo 'Building...'
           sh 'mkdir -p target'
-          sh 'mvn clean install'
+          sh 'mvn clean install -X'
+          sh 'ls -la target'
         }
     }
 
