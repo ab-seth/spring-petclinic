@@ -11,7 +11,7 @@
 
     - name: Copy Petclinic jar
       copy:
-        src: target/spring-petclinic-2.5.0.jar
+        src: "{{ workspace }}/target/spring-petclinic-*.jar"
         dest: /app/petclinic.jar
 
     - name: Install systemd service

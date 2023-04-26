@@ -5,7 +5,8 @@ pipeline {
     stage('Build') {
         steps {
           echo 'Building...'
-            sh 'mvn clean install'
+          sh 'mkdir -p target'
+          sh 'mvn clean install'
         }
     }
 
