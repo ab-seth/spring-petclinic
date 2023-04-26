@@ -2,15 +2,21 @@ pipeline {
   agent any
   tools {
     maven 'Maven'
-}
+  }
+  options {
+    timestamps()
+  }
 
   stages {
     stage('Build') {
-        steps {
-          echo 'Building...'
-          sh 'mkdir -p target'
-          sh 'mvn clean install'
-        }
+      steps {
+        echo "========== Building Stage Starts =========="
+        sh 'mkdir -p target'
+        sh 'mvn clean install -X'
+        sh 'ls -la target'
+        stash(name: 'built-jar', includes: 'target/*.jar')
+        echo "========== Building Stage Ends =========="
+      }
     }
 
     stage('Test') {
@@ -23,11 +29,12 @@ pipeline {
     stage('Deploy') {
       steps {
         echo 'Deploying...'
+        unstash 'built-jar'
         ansiblePlaybook(
           inventory: 'hosts.ini',
           playbook: 'deploy_petclinic.yml',
           installation: 'ansible',
-          credentialsId: 'Jenkins_private_key_ID'
+          credentialsId: 'random_id'
         )
       }
     }
