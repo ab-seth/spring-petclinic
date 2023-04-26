@@ -39,7 +39,7 @@ pipeline {
           inventory: 'hosts.ini',
           playbook: 'deploy_petclinic.yml',
           installation: 'ansible',
-          credentialsId: 'random_id',
+          credentialsId: 'random_id_update',
           extras: "-e jar_file=${JAR_FILE}"
         )
       }
