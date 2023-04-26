@@ -32,7 +32,7 @@ pipeline {
           inventory: 'hosts.ini',
           playbook: 'deploy_petclinic.yml',
           installation: 'ansible',
-          credentialsId: 'Jenkins_private_key_ID'
+          credentialsId: 'random_id'
         )
       }
     }
